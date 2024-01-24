@@ -1,0 +1,25 @@
+<tr id="task-{{ task.id }}">
+  <td>{{ task.name }}</td>
+  <td><small>{{ task.date }}</small></td>
+  <td>
+    <button
+      hx-delete="{% url 'delete_task' task.id %}"
+      hx-trigger="click"
+      hx-target="#task-{{ task.id }}"
+      class="pure-button"
+      style="background: rgb(202, 60, 60); color: white; float: right"
+    >
+      Delete
+    </button>
+    <button
+      hx-get="{% url 'update_task' task.id %}"
+      hx-trigger="click"
+      hx-target="#task-{{ task.id }}"
+      hx-swap="outerHTML"
+      class="pure-button"
+      style="float: right; margin-right: 10px"
+    >
+      Update
+    </button>
+  </td>
+</tr>
