@@ -18,13 +18,25 @@
       <tr>
         <th>Name</th>
         <th>Date</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       {% for task in tasks %}
-      <tr>
+      <tr id="task-{{ task.id }}">
         <td>{{ task.name }}</td>
         <td><small>{{ task.date }}</small></td>
+        <td>
+          <button
+            hx-delete="{% url 'delete_task' task.id %}"
+            hx-trigger="click"
+            hx-target="#task-{{ task.id }}"
+            class="pure-button"
+            style="background: rgb(202, 60, 60); color: white; float: right"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
