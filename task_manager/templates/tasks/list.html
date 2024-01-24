@@ -2,30 +2,6 @@
 
 {% block content %}
 
-{% if tasks %}
-<table
-  class="pure-table pure-table-striped pure-table-horizontal"
-  style="width: 100%"
->
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Name</th>
-      <th>Priority</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for task in tasks %}
-    <tr>
-      <td>{{ task.date }}</td>
-      <td>{{ task.name }}</td>
-      <td>{{ task.priority }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p>There are no tasks yet :(</p>
-{% endif %}
+{% include 'tasks/list_partial.html' %}
 
 {% endblock %}

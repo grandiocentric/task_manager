@@ -19,7 +19,7 @@
       }
     </style>
   </head>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <h1>Task Manager</h1>
     {% block content %}{% endblock %}
     <script

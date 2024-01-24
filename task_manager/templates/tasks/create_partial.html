@@ -1,0 +1,13 @@
+<form class="pure-form">
+  <fieldset>
+    <input type="text" placeholder="Name" />
+    <button
+      hx-post="/tasks/create/"
+      hx-target="#content"
+      hx-trigger="click"
+      class="pure-button pure-button-primary"
+    >
+      Save
+    </button>
+  </fieldset>
+</form>
