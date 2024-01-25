@@ -18,11 +18,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for task in tasks %} {% include 'tasks/task_partial.html' %} {% endfor
-      %}
+      {% for task in tasks %}
+
+      {% include 'tasks/task_partial.html' %}
+
+      {% endfor %}
     </tbody>
   </table>
   {% else %}
-  <p>There are no tasks yet :(</p>
+  <p>There are no tasks yet!</p>
   {% endif %}
 </div>

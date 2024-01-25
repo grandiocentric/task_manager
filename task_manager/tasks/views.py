@@ -3,58 +3,51 @@ from urllib.parse import parse_qs
 from django.http import HttpResponse
 from django.shortcuts import render
 
-tasks = [
-    dict(
-        name="Task One",
-        id=0,
-    ),
-    dict(
-        name="Task Two",
-        id=1,
-    ),
-    dict(
-        name="Task Three",
-        id=2,
-    ),
-]
+from .models import Task
 
 
 def get_tasks(request):
-    if request.headers.get("HX-Request"):
-        name = request.POST["name"]
-        new_task = {"name": name, "id": len(tasks) + 1}
-        return render(
-            request,
-            "tasks/list_partial.html",
-            {"tasks": tasks + [new_task]},
-        )
-    else:
-        return render(request, "tasks/list.html", {"tasks": tasks})
+    tasks = Task.objects.all()
+    is_partial = request.headers.get("HX-Request")
+    template = "list_partial" if is_partial else "list"
+    return render(request, f"tasks/{template}.html", {"tasks": tasks})
 
 
 def create_task(request):
     if request.method == "GET":
-        return render(request, "tasks/create_partial.html")
+        template = "create_partial"
+        context = {}
     elif request.method == "POST":
-        return get_tasks(request)
+        name = request.POST["name"]
+        new_task = Task(name=name)
+        new_task.save()
+
+        template = "list_partial"
+        tasks = Task.objects.all()
+        context = {"tasks": tasks}
+
+    return render(request, f"tasks/{template}.html", context)
 
 
 def update_task(request, task_id):
     if request.method == "PUT":
         values = parse_qs(request.body.decode("utf-8"))
-        name = values["name"][0]
-        return render(
-            request,
-            "tasks/task_partial.html",
-            {"task": tasks[task_id] | {"name": name}},
-        )
+        new_name = values["name"][0]
+
+        task = Task.objects.get(pk=task_id)
+        task.name = new_name
+        task.save()
+
+        template = "task_partial"
+
     elif request.method == "GET":
-        return render(
-            request,
-            "tasks/update_partial.html",
-            {"task": tasks[task_id]},
-        )
+        task = Task.objects.get(pk=task_id)
+
+        template = "update_partial"
+
+    return render(request, f"tasks/{template}.html", {"task": task})
 
 
 def delete_task(request, task_id):
+    Task.objects.get(pk=task_id).delete()
     return HttpResponse()
