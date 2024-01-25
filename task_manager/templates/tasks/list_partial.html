@@ -1,6 +1,6 @@
 <div id="content">
   <button
-    hx-get="/tasks/create/"
+    hx-get="{% url 'create_task' %}"
     hx-trigger="click"
     hx-swap="outerHTML"
     class="pure-button pure-button-primary"
