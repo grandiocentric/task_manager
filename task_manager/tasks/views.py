@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from urllib.parse import parse_qs
 
 from django.http import HttpResponse
@@ -6,17 +5,14 @@ from django.shortcuts import render
 
 tasks = [
     dict(
-        date=datetime.now(),
         name="Task One",
         id=0,
     ),
     dict(
-        date=datetime.now() - timedelta(days=1),
         name="Task Two",
         id=1,
     ),
     dict(
-        date=datetime.now() - timedelta(days=3),
         name="Task Three",
         id=2,
     ),
@@ -24,22 +20,40 @@ tasks = [
 
 
 def get_tasks(request):
-    return render(request, "tasks/list.html", {"tasks": tasks})
+    if request.headers.get("HX-Request"):
+        name = request.POST["name"]
+        new_task = {"name": name, "id": len(tasks) + 1}
+        return render(
+            request,
+            "tasks/list_partial.html",
+            {"tasks": tasks + [new_task]},
+        )
+    else:
+        return render(request, "tasks/list.html", {"tasks": tasks})
 
 
 def create_task(request):
     if request.method == "GET":
         return render(request, "tasks/create_partial.html")
     elif request.method == "POST":
-        return render(request, "tasks/list_partial.html", {"tasks": tasks})
+        return get_tasks(request)
 
 
 def update_task(request, task_id):
     if request.method == "PUT":
         values = parse_qs(request.body.decode("utf-8"))
-        return render(request, "tasks/task_partial.html", {"task": tasks[task_id]})
+        name = values["name"][0]
+        return render(
+            request,
+            "tasks/task_partial.html",
+            {"task": tasks[task_id] | {"name": name}},
+        )
     elif request.method == "GET":
-        return render(request, "tasks/update_partial.html", {"task": tasks[task_id]})
+        return render(
+            request,
+            "tasks/update_partial.html",
+            {"task": tasks[task_id]},
+        )
 
 
 def delete_task(request, task_id):

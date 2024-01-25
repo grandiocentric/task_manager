@@ -10,23 +10,16 @@
   </button>
 
   {% if tasks %}
-  <table
-    class="pure-table pure-table-striped pure-table-horizontal"
-    style="width: 100%"
-  >
+  <table class="pure-table pure-table-horizontal" style="width: 100%">
     <thead>
       <tr>
         <th>Name</th>
-        <th>Date</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for task in tasks %}
-
-      {% include 'tasks/task_partial.html' %}
-
-      {% endfor %}
+      {% for task in tasks %} {% include 'tasks/task_partial.html' %} {% endfor
+      %}
     </tbody>
   </table>
   {% else %}
