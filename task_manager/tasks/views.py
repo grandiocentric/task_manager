@@ -8,9 +8,7 @@ from .models import Task
 
 def get_tasks(request):
     tasks = Task.objects.all()
-    is_partial = request.headers.get("HX-Request")
-    template = "list_partial" if is_partial else "list"
-    return render(request, f"tasks/{template}.html", {"tasks": tasks})
+    return render(request, "tasks/list.html", {"tasks": tasks})
 
 
 def create_task(request):
